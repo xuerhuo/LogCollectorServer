@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by erhuo on 2017/5/9.
  */
-public class LogCollectorServer{
+public class LogCollectorServer {
     public static HashMap<String, String> margs;
     public static HashMap<String, String> parselog;
     public static NginxLogParse ng=new NginxLogParse();

@@ -1,16 +1,9 @@
 package org.erhuo.LogCollectorServer;
 
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.*;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.rest.RestStatus;
 
-import javax.print.DocFlavor;
-import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 
 /**
