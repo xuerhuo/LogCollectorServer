@@ -18,6 +18,8 @@ import java.util.HashMap;
  */
 public class OutPut {
     public static TransportClient client;
+    public static String els_index;
+    public static String els_type;
     public static void output(HashMap<String,String> vale) {
         if(LogCollectorServer.margs.get("outputype").equals("elasticsearch")){
           elsoutput(vale);

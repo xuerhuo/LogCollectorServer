@@ -23,10 +23,10 @@ public class LogCollectorServer{
     public static NginxLogParse ng=new NginxLogParse();
     public static Redis redis;
     public static void main(String[] args) throws InterruptedException, UnknownHostException {
-        ExecutorService threadPool = Executors.newFixedThreadPool(50);
         String temp;
         long len;
         margs = Tools.initargs(args);
+        ExecutorService threadPool = Executors.newFixedThreadPool(Integer.parseInt(margs.get("thread")));
         initSys();
         System.out.print(redis.llen(margs.get("logrediskey")));
         while (true) {
@@ -57,5 +57,7 @@ public class LogCollectorServer{
         System.out.println(margs.get("els_host")+margs.get("els_port"));
         OutPut.client=new PreBuiltTransportClient(Settings.EMPTY)
                 .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(margs.get("els_host")), Integer.parseInt(margs.get("els_port"))));
+        OutPut.els_index=margs.get("els_index");
+        OutPut.els_type = margs.get("els_type");
     }
 }
