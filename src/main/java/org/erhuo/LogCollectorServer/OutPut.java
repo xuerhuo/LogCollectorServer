@@ -26,7 +26,7 @@ public class OutPut {
         }
     }
     public static int elsoutput(HashMap<String,String> json) {
-        IndexResponse response = client.prepareIndex("twitter", "tweet")
+        IndexResponse response = client.prepareIndex(els_index, els_type)
                 .setSource(json)
                 .get();
         // Index name
