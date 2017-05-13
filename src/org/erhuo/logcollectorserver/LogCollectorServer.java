@@ -55,7 +55,7 @@ public class LogCollectorServer {
     }
     public static void initSys() throws UnknownHostException {
         if(margs.get("inputype").equals("redis")){
-            redis=new Redis(margs.get("redis_host"),margs.get("redis_port"),margs.get("redis_password"));
+            redis=new Redis();
         }
         redis.keys();
         System.out.println(margs.get("els_host")+margs.get("els_port"));

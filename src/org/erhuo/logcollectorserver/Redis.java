@@ -15,10 +15,10 @@ public class Redis {
     boolean connected=false;
     static Jedis jedis;
 
-    public  Redis(String host,String port,String password){
-        jedis=new Jedis(host,Integer.parseInt(port));
-        if(!password.isEmpty()){
-            if (jedis.auth(password).equals("OK")){
+    public  Redis(){
+        jedis=new Jedis(LogCollectorServer.margs.get("redis_host"),Integer.parseInt(LogCollectorServer.margs.get("redis_port")));
+        if(!LogCollectorServer.margs.get("redis_password").isEmpty()){
+            if (jedis.auth(LogCollectorServer.margs.get("redis_password")).equals("OK")){
                 this.connected=true;
             }
         }
