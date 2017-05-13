@@ -17,7 +17,7 @@ public class Redis {
 
     public  Redis(){
         jedis=new Jedis(LogCollectorServer.margs.get("redis_host"),Integer.parseInt(LogCollectorServer.margs.get("redis_port")));
-        if(!LogCollectorServer.margs.get("redis_password").isEmpty()){
+        if(LogCollectorServer.margs.get("redis_password")!=null){
             if (jedis.auth(LogCollectorServer.margs.get("redis_password")).equals("OK")){
                 this.connected=true;
             }
