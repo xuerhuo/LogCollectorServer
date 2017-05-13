@@ -36,8 +36,8 @@ public class LogCollectorServer {
                 try {
                     temp = redis.lpop(margs.get("logrediskey"));
                 }catch (Exception e){
-                    initSys();
-                    temp = redis.lpop(margs.get("logrediskey"));
+                    temp="";
+                    System.exit(-1);
                 }
                 temp =Base64.decode(temp);
                     parselog = ng.parse(temp);

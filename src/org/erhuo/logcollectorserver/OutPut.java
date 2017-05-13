@@ -15,7 +15,12 @@ public class OutPut {
     public static String els_type;
     public static void output(HashMap<String,String> vale) {
         if(LogCollectorServer.margs.get("outputype").equals("elasticsearch")){
-          elsoutput(vale);
+            try {
+                elsoutput(vale);
+            }catch (Exception e){
+                System.exit(-1);
+            }
+
         }
     }
     public static int elsoutput(HashMap<String,String> json) {
