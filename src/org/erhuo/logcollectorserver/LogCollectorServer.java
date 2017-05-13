@@ -33,7 +33,12 @@ public class LogCollectorServer {
             len=redis.llen(margs.get("logrediskey"));
             System.out.println(len);
             while ( len> 1) {
-                temp = redis.lpop(margs.get("logrediskey"));
+                try {
+                    temp = redis.lpop(margs.get("logrediskey"));
+                }catch (Exception e){
+                    initSys();
+                    temp = redis.lpop(margs.get("logrediskey"));
+                }
                 temp =Base64.decode(temp);
                     parselog = ng.parse(temp);
                 threadPool.execute(new SingleThread(parselog));
