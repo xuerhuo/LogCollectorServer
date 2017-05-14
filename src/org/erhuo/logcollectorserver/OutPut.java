@@ -1,5 +1,6 @@
 package org.erhuo.logcollectorserver;
 
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.rest.RestStatus;
@@ -13,30 +14,30 @@ public class OutPut {
     public static TransportClient client;
     public static String els_index;
     public static String els_type;
+    public static long i=1;
+    public static int sendnum;
+    public static BulkRequestBuilder sendbuffer;
     public static void output(HashMap<String,String> vale) {
         if(LogCollectorServer.margs.get("outputype").equals("elasticsearch")){
             try {
                 elsoutput(vale);
             }catch (Exception e){
-                System.exit(-1);
+                System.out.print(e.toString());
+                System.exit(-3);
             }
 
         }
     }
     public static int elsoutput(HashMap<String,String> json) {
-        IndexResponse response = client.prepareIndex(els_index, els_type)
-                .setSource(json)
-                .get();
-        // Index name
-        String _index = response.getIndex();
-// Type name
-        String _type = response.getType();
-// Document ID (generated or not)
-        String _id = response.getId();
-// Version (if it's the first time you index this document, you will get: 1)
-        long _version = response.getVersion();
-// status has stored current instance statement.
-        RestStatus status = response.status();
-        return status.getStatus();
+        sendbuffer.add(client.prepareIndex(els_index,els_type).setSource(json));
+        i++;
+        if(i%sendnum==0){
+            sendbuffer.execute().actionGet();
+            System.out.println("i:"+i);
+        }
+//        if(i>=3000){
+//            System.exit(-4);
+//        }
+        return 0;
     }
 }

@@ -31,18 +31,19 @@ public class LogCollectorServer {
         System.out.print(redis.llen(margs.get("logrediskey")));
         while (true) {
             len=redis.llen(margs.get("logrediskey"));
-            System.out.println(len);
+            //System.out.println(len);
             while ( len> 1) {
                 try {
                     temp = redis.lpop(margs.get("logrediskey"));
                 }catch (Exception e){
                     temp="";
-                    System.exit(-1);
+                    System.exit(-4);
                 }
                 temp =Base64.decode(temp);
                     parselog = ng.parse(temp);
                 threadPool.execute(new SingleThread(parselog));
                 len=redis.llen(margs.get("logrediskey"));
+                //System.out.println(len);
             }
             try {
                 Thread.sleep(1000);
@@ -62,9 +63,11 @@ public class LogCollectorServer {
         try {
             OutPut.client = new PreBuiltTransportClient(Settings.EMPTY)
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(margs.get("els_host")), Integer.parseInt(margs.get("els_port"))));
+            OutPut.sendbuffer=OutPut.client.prepareBulk();
+            OutPut.sendnum=Integer.parseInt(margs.get("sendbuffernum"));
         }catch (Exception e){
             System.out.println(e.toString());
-            System.exit(-1);
+            System.exit(-2);
         }
             OutPut.els_index=margs.get("els_index");
         OutPut.els_type = margs.get("els_type");
