@@ -59,18 +59,6 @@ public class LogCollectorServer {
             redis=new Redis();
         }
         redis.keys();
-        System.out.println(margs.get("els_host")+margs.get("els_port"));
-        try {
-            OutPut.client = new PreBuiltTransportClient(Settings.EMPTY)
-                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(margs.get("els_host")), Integer.parseInt(margs.get("els_port"))));
-            OutPut.sendbuffer=OutPut.client.prepareBulk();
-            OutPut.sendnum=Integer.parseInt(margs.get("sendbuffernum"));
-        }catch (Exception e){
-            System.out.println(e.toString());
-            System.exit(-2);
-        }
-            OutPut.els_index=margs.get("els_index");
-        OutPut.els_type = margs.get("els_type");
-
+        OutPut.init();
     }
 }

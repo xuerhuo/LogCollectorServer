@@ -13,3 +13,7 @@
 xishui
 --els_type
 log
+--sendbuffer
+1000
+--sleep
+2000
