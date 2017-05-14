@@ -1,6 +1,10 @@
 package org.erhuo.logcollectorserver;
 
+import org.elasticsearch.action.bulk.BulkProcessor;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -22,12 +26,29 @@ public class OutPut {
     public static int sendnum;
     public static int sleep;
     public static BulkRequestBuilder sendbuffer;
+    public static BulkProcessor bulkProcessor;
     public static void init(){
         try {
             OutPut.client = new PreBuiltTransportClient(Settings.EMPTY)
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(LogCollectorServer.margs.get("els_host")), Integer.parseInt(LogCollectorServer.margs.get("els_port"))));
             OutPut.sendbuffer=OutPut.client.prepareBulk();
             OutPut.sendnum=Integer.parseInt(LogCollectorServer.margs.get("sendbuffernum"));
+            bulkProcessor=BulkProcessor.builder(OutPut.client,new BulkProcessor.Listener() {
+                @Override
+                public void beforeBulk(long l, BulkRequest bulkRequest) {
+
+                }
+
+                @Override
+                public void afterBulk(long l, BulkRequest bulkRequest, BulkResponse bulkResponse) {
+
+                }
+
+                @Override
+                public void afterBulk(long l, BulkRequest bulkRequest, Throwable throwable) {
+
+                }
+            }).setBulkActions(sendnum).setConcurrentRequests(0).build();
         }catch (Exception e){
             System.out.println(e.toString()+";OutPut init error");
             System.exit(-2);
@@ -50,23 +71,10 @@ public class OutPut {
         }
     }
     public static int elsoutput(HashMap<String,String> json) {
-        sendbuffer.add(client.prepareIndex(els_index,els_type).setSource(json));
+       // sendbuffer.add(client.prepareIndex(els_index,els_type).setSource(json));
+        IndexRequest indexRequest=new IndexRequest(els_index,els_type).source(json);
+        bulkProcessor.add(indexRequest);
         i++;
-        if(i%sendnum==0){
-            sendbuffer.execute().actionGet();
-            System.out.println("i:"+i);
-            if(sleep>0) {
-                try {
-                    Thread.sleep(sleep);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-//        if(i>=3000){
-//            System.exit(-4);
-//        }
         return 0;
     }
 }

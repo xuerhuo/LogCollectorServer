@@ -41,7 +41,8 @@ public class LogCollectorServer {
                 }
                 temp =Base64.decode(temp);
                     parselog = ng.parse(temp);
-                threadPool.execute(new SingleThread(parselog));
+                //threadPool.execute(new SingleThread(parselog));
+                OutPut.output(parselog);
                 len=redis.llen(margs.get("logrediskey"));
                 //System.out.println(len);
             }
