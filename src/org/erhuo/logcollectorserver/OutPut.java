@@ -41,7 +41,10 @@ public class OutPut {
 
                 @Override
                 public void afterBulk(long l, BulkRequest bulkRequest, BulkResponse bulkResponse) {
-
+                    if(bulkResponse.hasFailures()){
+                        System.out.println("excute bulkprocessor failure");
+                        System.exit(-3);
+                    }
                 }
 
                 @Override
